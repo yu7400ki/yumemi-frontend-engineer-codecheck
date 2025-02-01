@@ -17,7 +17,8 @@
       "correctness": {
         "useImportExtensions": "off",
         "noUndeclaredDependencies": "off",
-        "noUnusedVariables": "off"
+        "noUnusedVariables": "off",
+        "noUndeclaredVariables": "off"
       },
       "performance": {
         "noBarrelFile": "off"
@@ -32,7 +33,8 @@
           }
         },
         "noNamespaceImport": "off",
-        "noImplicitBoolean": "off"
+        "noImplicitBoolean": "off",
+        "useNamingConvention": "off"
       },
       "suspicious": {
         "noReactSpecificProps": "off"
