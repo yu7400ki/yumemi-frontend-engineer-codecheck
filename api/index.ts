@@ -1,12 +1,5 @@
 import { Hono } from "hono";
-
-type Bindings = {
-  ASSETS: Fetcher;
-};
-
-type Env = {
-  Bindings: Bindings;
-};
+import type { Env } from "./types";
 
 const app = new Hono<Env>().basePath("/api");
 
