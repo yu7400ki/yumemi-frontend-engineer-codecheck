@@ -1,32 +1,56 @@
-import { useCallback, useState } from "react";
+import { use, useCallback, useState } from "react";
+import { CheckboxGroupContext } from "../checkbox-group/checkbox-group.context";
 
 export type Props = {
-  value?: boolean;
-  defaultValue?: boolean;
-  onChange?: (value: boolean) => void;
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onChange?: (checked: boolean) => void;
+  value?: string;
 };
 
 export function useCheckbox(props: Props) {
-  const isControlled = props.value !== undefined;
+  const isControlled = props.checked !== undefined;
   const [internalValue, setInternalValue] = useState(
-    props.defaultValue ?? false,
+    props.defaultChecked ?? false,
   );
+  const context = use(CheckboxGroupContext);
+  const isGrouped = context !== undefined;
 
-  const value = isControlled ? props.value : internalValue;
+  let checked: boolean;
+  if (isGrouped) {
+    checked = props.value ? context.value.includes(props.value) : false;
+  } else {
+    checked = isControlled ? (props.checked as boolean) : internalValue;
+  }
+
+  const { onChange, value } = props;
+  const { onChange: groupOnChange } = context ?? {};
 
   const handleChange = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      if (!isControlled) {
-        setInternalValue(!internalValue);
+      if (isGrouped && value) {
+        groupOnChange?.(value);
+      } else if (!isControlled) {
+        setInternalValue(!checked);
       }
-      props.onChange?.(!value);
+      onChange?.(!checked);
     },
-    [internalValue, isControlled, props, value],
+    [isControlled, isGrouped, onChange, value, groupOnChange, checked],
   );
 
+  const handleChangeHiddenInput = useCallback(() => {
+    if (isGrouped && value) {
+      groupOnChange?.(value);
+    } else if (!isControlled) {
+      setInternalValue(!checked);
+    }
+    onChange?.(!checked);
+  }, [isControlled, isGrouped, onChange, value, groupOnChange, checked]);
+
   return {
-    value,
+    checked,
     handleChange,
+    handleChangeHiddenInput,
   };
 }
