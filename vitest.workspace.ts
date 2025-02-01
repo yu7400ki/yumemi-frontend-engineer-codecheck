@@ -1,4 +1,6 @@
+// biome-ignore lint/correctness/noNodejsModules: This file is meant to be run in Node.js
 import path from "node:path";
+// biome-ignore lint/correctness/noNodejsModules:
 import { fileURLToPath } from "node:url";
 import { storybookTest } from "@storybook/experimental-addon-test/vitest-plugin";
 import { defineWorkspace } from "vitest/config";
