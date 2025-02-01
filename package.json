@@ -19,6 +19,7 @@
   "dependencies": {
     "@hono/zod-validator": "^0.4.2",
     "hono": "^4.6.20",
+    "lucide-react": "^0.474.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zod": "^3.24.1"
