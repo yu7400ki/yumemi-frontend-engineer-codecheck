@@ -23,5 +23,5 @@
     "noUncheckedSideEffectImports": true
   },
   "references": [{ "path": "tsconfig.worker.json" }],
-  "include": ["src"]
+  "include": ["src", "styled-system"]
 }
