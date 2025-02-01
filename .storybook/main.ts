@@ -12,6 +12,15 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {},
   },
+  viteFinal: (config) => {
+    return {
+      ...config,
+      plugins: config.plugins?.filter(
+        // @ts-ignore
+        (plugin) => plugin?.name !== "vite-plugin-cloudflare",
+      ),
+    };
+  },
 };
 
 export default config;
