@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prepare": "orval",
+    "prepare": "run-p prepare:*",
+    "prepare:orval": "orval",
+    "prepare:panda": "panda codegen",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
