@@ -41,7 +41,7 @@ export const Default: Story = {
 export const CheckedByDefault: Story = {
   args: {
     children: "Checked Checkbox",
-    defaultValue: true,
+    defaultChecked: true,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -61,7 +61,7 @@ export const CheckedByDefault: Story = {
 const ControlledCheckboxWrapper = () => {
   const [checked, setChecked] = useState<boolean>(false);
   return (
-    <Checkbox value={checked} onChange={(newVal) => setChecked(newVal)}>
+    <Checkbox checked={checked} onChange={(newVal) => setChecked(newVal)}>
       Controlled Checkbox
     </Checkbox>
   );

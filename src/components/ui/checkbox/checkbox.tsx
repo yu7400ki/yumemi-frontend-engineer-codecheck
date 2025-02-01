@@ -4,9 +4,9 @@ import { checkboxRecipe } from "./checkbox.recipe";
 
 type Props = {
   children?: React.ReactNode;
-  value?: boolean;
-  defaultValue?: boolean;
-  onChange?: (value: boolean) => void;
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onChange?: (checked: boolean) => void;
   id?: string;
   name?: string;
 };
