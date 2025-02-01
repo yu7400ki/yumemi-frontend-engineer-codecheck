@@ -2,6 +2,10 @@
   "extends": "./tsconfig.node.json",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.worker.tsbuildinfo",
+    "composite": true,
+    "noEmit": false,
+    "outDir": "api/dist",
+    "emitDeclarationOnly": true,
     "types": ["@cloudflare/workers-types/2023-07-01", "vite/client"]
   },
   "include": ["api"]
