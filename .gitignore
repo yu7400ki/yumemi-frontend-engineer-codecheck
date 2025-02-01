@@ -29,3 +29,5 @@ dist-ssr
 
 # generated files
 api/gen
+
+*storybook.log
