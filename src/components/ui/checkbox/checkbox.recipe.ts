@@ -15,8 +15,12 @@ export const checkboxRecipe = sva({
       height: "1.2em",
       borderRadius: "md",
       border: "1px solid",
-      borderColor: "black",
       cursor: "pointer",
+      outline: "none",
+      _focusVisible: {
+        outline: "2px solid",
+        outlineOffset: "2px",
+      },
     },
     icon: {
       display: "inline-block",
