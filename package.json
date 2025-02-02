@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.2",
+    "@location-state/core": "^1.2.2",
     "@tanstack/react-query": "^5.66.0",
     "hono": "^4.6.20",
     "lucide-react": "^0.474.0",
