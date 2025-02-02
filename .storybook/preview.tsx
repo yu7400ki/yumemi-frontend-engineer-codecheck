@@ -1,6 +1,6 @@
 import type { Preview } from "@storybook/react";
 import { initialize, mswLoader } from "msw-storybook-addon";
-import { TanstackQueryProvider } from "../src/components/providers/tanstack-query";
+import { Providers } from "../src/components/providers";
 import { handlers } from "../src/mocks/handlers";
 import "../src/index.css";
 
@@ -20,9 +20,9 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <TanstackQueryProvider>
+      <Providers>
         <Story />
-      </TanstackQueryProvider>
+      </Providers>
     ),
   ],
   loaders: [mswLoader],
