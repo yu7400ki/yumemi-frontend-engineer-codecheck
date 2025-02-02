@@ -15,11 +15,9 @@ export function usePrefecturesSelector() {
   const setSelectedPrefectureCodes = useCallback(
     (prefCodes: number[]) => {
       _setSelectedPrefectureCodes(
-        prefCodes
-          .filter((prefCode) =>
-            prefectures.some((pref) => pref.prefCode === prefCode),
-          )
-          .map(Number),
+        prefCodes.filter((prefCode) =>
+          prefectures.some((pref) => pref.prefCode === prefCode),
+        ),
       );
     },
     [prefectures, _setSelectedPrefectureCodes],
