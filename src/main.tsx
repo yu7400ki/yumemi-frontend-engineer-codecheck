@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Providers } from "./components/providers";
 import "./index.css";
 import App from "./app.tsx";
 
@@ -18,7 +19,9 @@ enableMocking().then(() => {
   if (root) {
     createRoot(root).render(
       <StrictMode>
-        <App />
+        <Providers>
+          <App />
+        </Providers>
       </StrictMode>,
     );
   }
