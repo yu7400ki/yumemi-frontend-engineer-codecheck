@@ -29,5 +29,5 @@
     }
   },
   "references": [{ "path": "tsconfig.worker.json" }],
-  "include": ["src", "styled-system"]
+  "include": ["src", "styled-system", ".storybook/**/*"]
 }
