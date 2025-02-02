@@ -1,7 +1,10 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { contextStorage } from "hono/context-storage";
-import type { ContentfulStatusCode } from "hono/utils/http-status";
+import type {
+  ContentfulStatusCode,
+  SuccessStatusCode,
+} from "hono/utils/http-status";
 import { z } from "zod";
 import type { GetApiV1PopulationCompositionPerYearParams } from "./gen/models";
 import { getApiV1PopulationCompositionPerYear } from "./gen/人口構成/人口構成";
@@ -19,7 +22,10 @@ const resas = new Hono<Env>()
     if (status === 200) {
       return c.json(prefectures);
     }
-    return c.json(data as unknown as string, status as ContentfulStatusCode);
+    return c.json(
+      data as unknown as string,
+      status as Exclude<ContentfulStatusCode, SuccessStatusCode>,
+    );
   })
   .get("/population", zValidator("query", populationQuerySchema), async (c) => {
     const query = c.req.valid(
@@ -30,7 +36,10 @@ const resas = new Hono<Env>()
     if (status === 200) {
       return c.json(population);
     }
-    return c.json(data as unknown as string, status as ContentfulStatusCode);
+    return c.json(
+      data as unknown as string,
+      status as Exclude<ContentfulStatusCode, SuccessStatusCode>,
+    );
   });
 
 const app = new Hono<Env>()
