@@ -20,11 +20,13 @@
     "@hono/zod-validator": "^0.4.2",
     "@location-state/core": "^1.2.2",
     "@tanstack/react-query": "^5.66.0",
+    "es-toolkit": "^1.32.0",
     "hono": "^4.6.20",
     "lucide-react": "^0.474.0",
     "msw": "^2.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "recharts": "^2.15.1",
     "zod": "^3.24.1"
   },
   "devDependencies": {
