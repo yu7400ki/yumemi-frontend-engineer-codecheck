@@ -1,4 +1,5 @@
 import { useLocationState } from "@location-state/core";
+import { Suspense } from "react";
 import { css } from "styled-system/css";
 import { PopulationChart } from "../population-chart";
 
@@ -41,9 +42,13 @@ export function PrefecturePopulation() {
         className={css({
           width: "100%",
           aspectRatio: "16 / 9",
+          display: "grid",
+          placeItems: "center",
         })}
       >
-        <PopulationChart populationType={populationType} />
+        <Suspense fallback={<div>グラフをロード中...</div>}>
+          <PopulationChart populationType={populationType} />
+        </Suspense>
       </div>
     </div>
   );
