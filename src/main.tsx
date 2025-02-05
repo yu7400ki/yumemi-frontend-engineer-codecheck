@@ -1,7 +1,8 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { Providers } from "./components/providers";
 import "./index.css";
+import { css } from "styled-system/css";
 import App from "./app.tsx";
 
 async function enableMocking() {
@@ -20,7 +21,31 @@ enableMocking().then(() => {
     createRoot(root).render(
       <StrictMode>
         <Providers>
-          <App />
+          <Suspense
+            fallback={
+              <div
+                className={css({
+                  h: "100vh",
+                  display: "grid",
+                  placeItems: "center",
+                })}
+              >
+                <div
+                  className={css({
+                    border: "4px solid",
+                    borderColor: "gray.300",
+                    borderTopColor: "transparent",
+                    rounded: "full",
+                    h: 12,
+                    aspectRatio: "1 / 1",
+                    animation: "spin",
+                  })}
+                />
+              </div>
+            }
+          >
+            <App />
+          </Suspense>
         </Providers>
       </StrictMode>,
     );
