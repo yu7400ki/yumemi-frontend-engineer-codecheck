@@ -7,13 +7,7 @@ import { usePrefecturesSelector } from "../../hooks/use-prefectures-selector";
 
 export function PrefecturesCheckboxGroup() {
   return (
-    <fieldset
-      className={css({
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
-        rowGap: 1,
-      })}
-    >
+    <fieldset>
       <legend
         className={css({
           mb: 1,
@@ -23,10 +17,26 @@ export function PrefecturesCheckboxGroup() {
       >
         都道府県
       </legend>
-      <Suspense fallback={<LoadingPrefectures />}>
-        <PrefecturesCheckboxList />
-      </Suspense>
+      <CheckboxListContainer>
+        <Suspense fallback={<LoadingPrefectures />}>
+          <PrefecturesCheckboxList />
+        </Suspense>
+      </CheckboxListContainer>
     </fieldset>
+  );
+}
+
+function CheckboxListContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className={css({
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
+        rowGap: 1,
+      })}
+    >
+      {children}
+    </div>
   );
 }
 
