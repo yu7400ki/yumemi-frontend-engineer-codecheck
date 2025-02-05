@@ -1,5 +1,3 @@
-function App() {
-  return <></>;
-}
+import { Page } from "./components/pages";
 
-export default App;
+export default Page;
