@@ -27,6 +27,7 @@ export default defineConfig({
           },
           border: {
             default: { value: "{colors.neutral.300}" },
+            emphasis: { value: "{colors.neutral.500}" },
           },
         },
       },
