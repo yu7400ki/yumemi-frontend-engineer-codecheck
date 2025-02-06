@@ -15,9 +15,7 @@ export function PrefecturePopulation() {
   return (
     <div
       className={css({
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-end",
+        display: "grid",
       })}
     >
       <select
@@ -30,6 +28,7 @@ export function PrefecturePopulation() {
           marginBottom: 2,
           width: "100%",
           maxWidth: "xs",
+          placeSelf: "end",
         })}
       >
         {POPULATION_TYPE.map((type) => (
@@ -40,14 +39,25 @@ export function PrefecturePopulation() {
       </select>
       <div
         className={css({
-          width: "100%",
           aspectRatio: "16 / 9",
           display: "grid",
           placeItems: "center",
+          overflowX: "auto",
+          overflowY: "hidden",
+          maxWidth: "100%",
+          minHeight: "calc(token(sizes.3xl) * 9 / 16)",
         })}
       >
         <Suspense fallback={<div>グラフをロード中...</div>}>
-          <PopulationChart populationType={populationType} />
+          <div
+            className={css({
+              width: "100%",
+              minWidth: "3xl",
+              aspectRatio: "16 / 9",
+            })}
+          >
+            <PopulationChart populationType={populationType} />
+          </div>
         </Suspense>
       </div>
     </div>
