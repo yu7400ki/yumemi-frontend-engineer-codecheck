@@ -7,7 +7,7 @@ export const checkboxRecipe = sva({
       display: "flex",
       alignItems: "center",
       cursor: "pointer",
-      gap: "1",
+      gap: "1.5",
     },
     trigger: {
       display: "grid",
