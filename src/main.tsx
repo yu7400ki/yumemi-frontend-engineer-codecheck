@@ -4,6 +4,7 @@ import { Providers } from "./components/providers";
 import "./index.css";
 import { css } from "styled-system/css";
 import App from "./app.tsx";
+import { Spinner } from "./components/ui/spinner";
 
 async function enableMocking() {
   if (import.meta.env.VITE_ENABLE_API_MOCK !== "true") {
@@ -30,17 +31,7 @@ enableMocking().then(() => {
                   placeItems: "center",
                 })}
               >
-                <div
-                  className={css({
-                    border: "4px solid",
-                    borderColor: "gray.300",
-                    borderTopColor: "transparent",
-                    rounded: "full",
-                    h: 12,
-                    aspectRatio: "1 / 1",
-                    animation: "spin",
-                  })}
-                />
+                <Spinner />
               </div>
             }
           >

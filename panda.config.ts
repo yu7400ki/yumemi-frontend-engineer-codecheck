@@ -12,7 +12,33 @@ export default defineConfig({
 
   // Useful for theme customization
   theme: {
-    extend: {},
+    extend: {
+      semanticTokens: {
+        colors: {
+          bg: {
+            default: { value: "white" },
+            canvas: { value: "#fcfcfc" },
+            emphasis: { value: "{colors.neutral.200}" },
+            fill: { value: "{colors.neutral.800}" },
+          },
+          fg: {
+            default: { value: "{colors.neutral.800}" },
+            fill: { value: "{colors.neutral.50}" },
+          },
+          border: {
+            default: { value: "{colors.neutral.300}" },
+            emphasis: { value: "{colors.neutral.500}" },
+          },
+        },
+      },
+    },
+  },
+
+  globalCss: {
+    body: {
+      bg: "bg.canvas",
+      color: "fg.default",
+    },
   },
 
   // The output directory for your css system
