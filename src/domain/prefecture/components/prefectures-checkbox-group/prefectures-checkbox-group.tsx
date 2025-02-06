@@ -1,5 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckboxGroup } from "@/components/ui/checkbox-group";
+import { Skelton } from "@/components/ui/skelton";
 import { Suspense, useCallback } from "react";
 import { css } from "styled-system/css";
 import { usePrefectures } from "../../api";
@@ -72,15 +73,12 @@ function LoadingPrefectures() {
   return (
     <>
       {Array.from({ length: 47 }).map((_, index) => (
-        <div
+        <Skelton
           // biome-ignore lint/suspicious/noArrayIndexKey: static array
           key={index}
           className={css({
             w: 20,
             h: 6,
-            backgroundColor: "gray.200",
-            rounded: "lg",
-            animation: "pulse 2s infinite",
           })}
         />
       ))}

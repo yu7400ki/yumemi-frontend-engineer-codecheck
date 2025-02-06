@@ -24,7 +24,8 @@ export function PrefecturePopulation() {
         className={css({
           padding: 2,
           borderRadius: 2,
-          border: "1px solid #ccc",
+          border: "1px solid",
+          borderColor: "border.default",
           marginBottom: 2,
           width: "100%",
           maxWidth: "xs",

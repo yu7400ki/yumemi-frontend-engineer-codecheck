@@ -19,7 +19,7 @@ export function Page() {
       <header
         className={css({
           py: 3,
-          bg: "gray.100",
+          bg: "bg.emphasis",
         })}
       >
         <h1
