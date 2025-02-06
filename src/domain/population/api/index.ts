@@ -1,18 +1,28 @@
 import { HttpError, client } from "@/libs/api";
 import { useQueries } from "@tanstack/react-query";
-import type { GetApiV1PopulationCompositionPerYearParams } from "api/gen/models";
+import Dataloader from "dataloader";
 
-export async function getPopulation({
-  prefCode,
-}: GetApiV1PopulationCompositionPerYearParams) {
+async function populationLoaderFn(prefCodes: readonly number[]) {
   const resp = await client.population.$get({
-    query: { prefCodes: [prefCode] },
+    query: { prefCodes: prefCodes.map(String) },
   });
   if (resp.ok) {
     const data = await resp.json();
-    return data[0];
+    const populationsMap = new Map<number, (typeof data)[number]>();
+    for (const population of data) {
+      populationsMap.set(population.prefCode, population);
+    }
+    return prefCodes.map((prefCode) => populationsMap.get(prefCode));
   }
   throw new HttpError(resp);
+}
+
+const populationLoader = new Dataloader(populationLoaderFn, {
+  cache: false,
+});
+
+export async function getPopulation(prefCode: number) {
+  return await populationLoader.load(prefCode);
 }
 
 export function usePopulations(prefCodes: number[]) {
@@ -20,19 +30,14 @@ export function usePopulations(prefCodes: number[]) {
     queries: prefCodes.map((prefCode) => {
       return {
         queryKey: ["population", prefCode],
-        queryFn: () => getPopulation({ prefCode: String(prefCode) }),
+        queryFn: () => getPopulation(prefCode),
       };
     }),
     combine: (results) => {
       return {
         data: results
           .map((result) =>
-            result.data !== undefined
-              ? {
-                  prefCode: result.data.prefCode,
-                  data: result.data.data,
-                }
-              : undefined,
+            result.data !== undefined ? result.data : undefined,
           )
           .filter((result) => result !== undefined),
         error: results.map((result) => result.error),
