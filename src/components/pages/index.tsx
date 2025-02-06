@@ -20,7 +20,6 @@ export function Page() {
         className={css({
           py: 3,
           bg: "gray.100",
-          mb: 8,
         })}
       >
         <h1
@@ -40,6 +39,7 @@ export function Page() {
           maxW: "4xl",
           mx: "auto",
           px: 2,
+          py: 8,
           sm: {
             px: 4,
           },
