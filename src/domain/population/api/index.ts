@@ -1,14 +1,16 @@
 import { HttpError, client } from "@/libs/api";
 import { useQueries } from "@tanstack/react-query";
 import type { GetApiV1PopulationCompositionPerYearParams } from "api/gen/models";
-import { zip } from "es-toolkit";
 
 export async function getPopulation({
   prefCode,
 }: GetApiV1PopulationCompositionPerYearParams) {
-  const resp = await client.population.$get({ query: { prefCode } });
+  const resp = await client.population.$get({
+    query: { prefCodes: [prefCode] },
+  });
   if (resp.ok) {
-    return await resp.json();
+    const data = await resp.json();
+    return data[0];
   }
   throw new HttpError(resp);
 }
@@ -23,12 +25,12 @@ export function usePopulations(prefCodes: number[]) {
     }),
     combine: (results) => {
       return {
-        data: zip(prefCodes, results)
-          .map(([prefCode, result]) =>
+        data: results
+          .map((result) =>
             result.data !== undefined
               ? {
-                  prefCode,
-                  data: result.data,
+                  prefCode: result.data.prefCode,
+                  data: result.data.data,
                 }
               : undefined,
           )

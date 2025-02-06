@@ -1,30 +1,32 @@
 import { client } from "@/libs/api";
+import { populationQuerySchema } from "api/schemas";
+import { zip } from "es-toolkit";
 import { http, HttpResponse } from "msw";
 import { seedPopulation } from "./data";
 
 export const handlers = [
   http.get(client.population.$url().toString(), ({ request }) => {
-    const prefCodeParam = new URL(request.url).searchParams.get("prefCode");
+    const prefCodeParam = new URL(request.url).searchParams.getAll("prefCodes");
+    const { data, error } = populationQuerySchema.safeParse({
+      prefCodes: prefCodeParam,
+    });
 
-    if (!prefCodeParam) {
-      return HttpResponse.text("Bad Request", {
+    if (error) {
+      return HttpResponse.json(error, {
         status: 400,
       });
     }
 
-    const prefCode = Number(prefCodeParam);
-    if (Number.isNaN(prefCode)) {
-      return HttpResponse.text("Bad Request", {
-        status: 400,
-      });
-    }
+    const { prefCodes } = data;
 
-    if (prefCode < 1 || prefCode > 47) {
-      return HttpResponse.text("Not Found", {
-        status: 404,
-      });
-    }
-
-    return HttpResponse.json(seedPopulation(prefCode));
+    const populations = prefCodes.map((prefCode) =>
+      seedPopulation(Number(prefCode)),
+    );
+    return HttpResponse.json(
+      zip(prefCodes, populations).map(([prefCode, data]) => ({
+        prefCode: Number(prefCode),
+        data,
+      })),
+    );
   }),
 ];
