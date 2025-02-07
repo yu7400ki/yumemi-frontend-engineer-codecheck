@@ -1,6 +1,7 @@
 import { HttpError, client } from "@/libs/api";
 import { useQueries } from "@tanstack/react-query";
 import Dataloader from "dataloader";
+import { zip } from "es-toolkit";
 
 async function populationLoaderFn(prefCodes: readonly number[]) {
   const resp = await client.population.$get({
@@ -22,7 +23,11 @@ const populationLoader = new Dataloader(populationLoaderFn, {
 });
 
 export async function getPopulation(prefCode: number) {
-  return await populationLoader.load(prefCode);
+  const data = await populationLoader.load(prefCode);
+  if (data) {
+    return data;
+  }
+  throw new Error("Failed to fetch population data");
 }
 
 export function usePopulations(prefCodes: number[]) {
@@ -40,7 +45,11 @@ export function usePopulations(prefCodes: number[]) {
             result.data !== undefined ? result.data : undefined,
           )
           .filter((result) => result !== undefined),
-        error: results.map((result) => result.error),
+        error: zip(prefCodes, results)
+          .map(([prefCode, result]) =>
+            result.error ? { prefCode, error: result.error } : undefined,
+          )
+          .filter((result) => result !== undefined),
         isFetching: results.some((result) => result.isFetching),
         isPending:
           results.length > 0 && results.every((result) => result.isPending),

@@ -1,6 +1,6 @@
 import { usePrefecturesSelector } from "@/domain/prefecture/hooks/use-prefectures-selector";
 import { zip } from "es-toolkit";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   CartesianGrid,
   Label,
@@ -26,9 +26,12 @@ export type Props = {
 };
 
 export function PopulationChart({ populationType }: Props) {
-  const { selectedPrefectureCodes, selectedPrefectures } =
-    usePrefecturesSelector();
-  const { data: prefectures } = usePopulations(selectedPrefectureCodes);
+  const {
+    selectedPrefectureCodes,
+    selectedPrefectures,
+    setSelectedPrefectureCodes,
+  } = usePrefecturesSelector();
+  const { data: prefectures, error } = usePopulations(selectedPrefectureCodes);
 
   const data = useMemo(
     () => convertPopulationsDataToChartData(prefectures, populationType),
@@ -38,6 +41,12 @@ export function PopulationChart({ populationType }: Props) {
   const fetchedPrefectures = selectedPrefectures.filter(({ prefCode }) =>
     prefectures.some((d) => d.prefCode === prefCode),
   );
+
+  useEffect(() => {
+    setSelectedPrefectureCodes((prev) =>
+      prev.filter((code) => !error.some((e) => e.prefCode === code)),
+    );
+  }, [error, setSelectedPrefectureCodes]);
 
   return (
     <ResponsiveContainer width="100%" height="100%">
