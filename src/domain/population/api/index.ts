@@ -1,16 +1,33 @@
 import { HttpError, client } from "@/libs/api";
 import { useQueries } from "@tanstack/react-query";
-import type { GetApiV1PopulationCompositionPerYearParams } from "api/gen/models";
+import Dataloader from "dataloader";
 import { zip } from "es-toolkit";
 
-export async function getPopulation({
-  prefCode,
-}: GetApiV1PopulationCompositionPerYearParams) {
-  const resp = await client.population.$get({ query: { prefCode } });
+async function populationLoaderFn(prefCodes: readonly number[]) {
+  const resp = await client.population.$get({
+    query: { prefCodes: prefCodes.map(String) },
+  });
   if (resp.ok) {
-    return await resp.json();
+    const data = await resp.json();
+    const populationsMap = new Map<number, (typeof data)[number]>();
+    for (const population of data) {
+      populationsMap.set(population.prefCode, population);
+    }
+    return prefCodes.map((prefCode) => populationsMap.get(prefCode));
   }
   throw new HttpError(resp);
+}
+
+const populationLoader = new Dataloader(populationLoaderFn, {
+  cache: false,
+});
+
+export async function getPopulation(prefCode: number) {
+  const data = await populationLoader.load(prefCode);
+  if (data) {
+    return data;
+  }
+  throw new Error("Failed to fetch population data");
 }
 
 export function usePopulations(prefCodes: number[]) {
@@ -18,22 +35,21 @@ export function usePopulations(prefCodes: number[]) {
     queries: prefCodes.map((prefCode) => {
       return {
         queryKey: ["population", prefCode],
-        queryFn: () => getPopulation({ prefCode: String(prefCode) }),
+        queryFn: () => getPopulation(prefCode),
       };
     }),
     combine: (results) => {
       return {
-        data: zip(prefCodes, results)
-          .map(([prefCode, result]) =>
-            result.data !== undefined
-              ? {
-                  prefCode,
-                  data: result.data,
-                }
-              : undefined,
+        data: results
+          .map((result) =>
+            result.data !== undefined ? result.data : undefined,
           )
           .filter((result) => result !== undefined),
-        error: results.map((result) => result.error),
+        error: zip(prefCodes, results)
+          .map(([prefCode, result]) =>
+            result.error ? { prefCode, error: result.error } : undefined,
+          )
+          .filter((result) => result !== undefined),
         isFetching: results.some((result) => result.isFetching),
         isPending:
           results.length > 0 && results.every((result) => result.isPending),
