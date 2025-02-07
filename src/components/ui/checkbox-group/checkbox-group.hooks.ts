@@ -1,4 +1,5 @@
-import { useCallback, useState } from "react";
+import { useControllableValue } from "@/hooks/use-controllable-value";
+import { useCallback } from "react";
 
 export type Props = {
   value?: string[];
@@ -7,12 +8,11 @@ export type Props = {
 };
 
 export function useCheckboxGroup(props: Props) {
-  const isControlled = props.value !== undefined;
-  const [internalValue, setInternalValue] = useState(props.defaultValue ?? []);
-
-  const value = isControlled ? props.value : internalValue;
-
-  const { onChange } = props;
+  const [value, setValue] = useControllableValue({
+    value: props.value,
+    defaultValue: props.defaultValue ?? [],
+    onChange: props.onChange,
+  });
 
   const handleChange = useCallback(
     (item: string) => {
@@ -22,12 +22,9 @@ export function useCheckboxGroup(props: Props) {
       } else {
         newValue.add(item);
       }
-      if (!isControlled) {
-        setInternalValue(Array.from(newValue));
-      }
-      onChange?.(Array.from(newValue));
+      setValue(Array.from(newValue));
     },
-    [isControlled, onChange, value],
+    [value, setValue],
   );
 
   return {
