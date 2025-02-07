@@ -1,4 +1,5 @@
-import { use, useCallback, useState } from "react";
+import { useControllableValue } from "@/hooks/use-controllable-value";
+import { use, useCallback } from "react";
 import { CheckboxGroupContext } from "../checkbox-group/checkbox-group.context";
 
 export type Props = {
@@ -9,48 +10,42 @@ export type Props = {
 };
 
 export function useCheckbox(props: Props) {
-  const isControlled = props.checked !== undefined;
-  const [internalValue, setInternalValue] = useState(
-    props.defaultChecked ?? false,
-  );
+  const [internalChecked, setInternalChecked] = useControllableValue({
+    value: props.checked,
+    defaultValue: props.defaultChecked ?? false,
+    // onChange: props.onChange,
+  });
   const context = use(CheckboxGroupContext);
   const isGrouped = context !== undefined;
 
-  let checked: boolean;
+  let checked = internalChecked;
   if (isGrouped) {
     checked = props.value ? context.value.includes(props.value) : false;
-  } else {
-    checked = isControlled ? (props.checked as boolean) : internalValue;
   }
 
   const { onChange, value } = props;
   const { onChange: groupOnChange } = context ?? {};
 
+  const toggleChecked = useCallback(() => {
+    if (isGrouped && value) {
+      groupOnChange?.(value);
+    } else {
+      setInternalChecked(!checked);
+    }
+    onChange?.(!checked);
+  }, [isGrouped, onChange, value, groupOnChange, checked, setInternalChecked]);
+
   const handleChange = useCallback(
     (e: React.MouseEvent) => {
       e.preventDefault();
-      if (isGrouped && value) {
-        groupOnChange?.(value);
-      } else if (!isControlled) {
-        setInternalValue(!checked);
-      }
-      onChange?.(!checked);
+      toggleChecked();
     },
-    [isControlled, isGrouped, onChange, value, groupOnChange, checked],
+    [toggleChecked],
   );
-
-  const handleChangeHiddenInput = useCallback(() => {
-    if (isGrouped && value) {
-      groupOnChange?.(value);
-    } else if (!isControlled) {
-      setInternalValue(!checked);
-    }
-    onChange?.(!checked);
-  }, [isControlled, isGrouped, onChange, value, groupOnChange, checked]);
 
   return {
     checked,
     handleChange,
-    handleChangeHiddenInput,
+    handleChangeHiddenInput: toggleChecked,
   };
 }
