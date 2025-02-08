@@ -1,5 +1,7 @@
 import { lazy } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { css } from "styled-system/css";
+import { ErrorComponent } from "./index.error";
 
 const PrefecturePopulation = lazy(() =>
   import("@/domain/population/components/prefecture-population").then(
@@ -15,7 +17,13 @@ const PrefecturesCheckboxGroup = lazy(() =>
 
 export function Page() {
   return (
-    <div>
+    <div
+      className={css({
+        display: "grid",
+        gridTemplateRows: "auto 1fr",
+        minHeight: "100dvh",
+      })}
+    >
       <header
         className={css({
           py: 3,
@@ -36,6 +44,7 @@ export function Page() {
         className={css({
           display: "grid",
           gap: 8,
+          width: "100%",
           maxW: "4xl",
           mx: "auto",
           px: 2,
@@ -45,8 +54,10 @@ export function Page() {
           },
         })}
       >
-        <PrefecturesCheckboxGroup />
-        <PrefecturePopulation />
+        <ErrorBoundary fallback={<ErrorComponent />}>
+          <PrefecturesCheckboxGroup />
+          <PrefecturePopulation />
+        </ErrorBoundary>
       </main>
     </div>
   );
