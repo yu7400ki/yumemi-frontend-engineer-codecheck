@@ -14,7 +14,9 @@
     "format": "biome check --write",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "vitest"
+    "test": "run-s test:*",
+    "test:storybook": "vitest --project storybook --run",
+    "test:browser": "vitest --project browser --run"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.4.2",
