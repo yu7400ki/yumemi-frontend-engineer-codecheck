@@ -1,3 +1,4 @@
+import { SlideSelector } from "@/components/ui/slide-selector";
 import { useLocationState } from "@location-state/core";
 import { Suspense } from "react";
 import { css } from "styled-system/css";
@@ -18,26 +19,14 @@ export function PrefecturePopulation() {
         display: "grid",
       })}
     >
-      <select
+      <SlideSelector
+        options={POPULATION_TYPE.map((type) => ({
+          value: type,
+          label: type,
+        }))}
         value={populationType}
-        onChange={(e) => setPopulationType(e.target.value)}
-        className={css({
-          padding: 2,
-          borderRadius: 2,
-          border: "1px solid",
-          borderColor: "border.default",
-          marginBottom: 2,
-          width: "100%",
-          maxWidth: "xs",
-          placeSelf: "end",
-        })}
-      >
-        {POPULATION_TYPE.map((type) => (
-          <option key={type} value={type}>
-            {type}
-          </option>
-        ))}
-      </select>
+        onChange={setPopulationType}
+      />
       <div
         className={css({
           aspectRatio: "16 / 9",
