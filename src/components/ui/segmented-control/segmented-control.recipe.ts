@@ -1,6 +1,6 @@
 import { sva } from "styled-system/css";
 
-export const slideSelectorRecipe = sva({
+export const segmentedControlRecipe = sva({
   slots: ["root", "indicator", "option"],
   base: {
     root: {

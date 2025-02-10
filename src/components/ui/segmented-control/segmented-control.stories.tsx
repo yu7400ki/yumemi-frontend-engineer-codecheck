@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect, fn, userEvent, waitFor, within } from "@storybook/test";
 import { useState } from "react";
-import { SlideSelector } from "./slide-selector";
-import type { Option } from "./slide-selector.types";
+import { SegmentedControl } from "./segmented-control";
+import type { Option } from "./segmented-control.types";
 
 // テスト用の選択肢
 const options: Option[] = [
@@ -11,18 +11,18 @@ const options: Option[] = [
   { label: "Option C", value: "c" },
 ];
 
-const meta: Meta<typeof SlideSelector> = {
-  title: "UI/SlideSelector",
-  component: SlideSelector,
+const meta: Meta<typeof SegmentedControl> = {
+  title: "UI/SegmentedControl",
+  component: SegmentedControl,
   tags: ["autodocs"],
   args: {
     options,
   },
-} satisfies Meta<typeof SlideSelector>;
+} satisfies Meta<typeof SegmentedControl>;
 
 export default meta;
 
-type Story = StoryObj<typeof SlideSelector>;
+type Story = StoryObj<typeof SegmentedControl>;
 
 export const Default: Story = {
   args: {
@@ -80,7 +80,7 @@ export const Controlled: Story = {
   render: () => {
     const [value, setValue] = useState("b");
     return (
-      <SlideSelector options={options} value={value} onChange={setValue} />
+      <SegmentedControl options={options} value={value} onChange={setValue} />
     );
   },
   play: async ({ canvasElement }) => {

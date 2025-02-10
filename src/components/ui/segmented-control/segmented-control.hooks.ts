@@ -1,6 +1,6 @@
 import { useControllableValue } from "@/hooks/use-controllable-value";
 import { type RefObject, createRef, useCallback, useMemo, useRef } from "react";
-import type { Option } from "./slide-selector.types";
+import type { Option } from "./segmented-control.types";
 
 export type Props = {
   options: Option[];
@@ -9,7 +9,7 @@ export type Props = {
   onChange?: (value: string) => void;
 };
 
-export function useSlideSelector(props: Props) {
+export function useSegmentedControl(props: Props) {
   const [value, setValue] = useControllableValue({
     value: props.value,
     defaultValue: props.defaultValue,
@@ -17,10 +17,8 @@ export function useSlideSelector(props: Props) {
   });
   const optionsRef = useRef<RefObject<HTMLButtonElement | null>[]>([]);
 
-  useMemo(() => {
-    optionsRef.current = props.options.map(() =>
-      createRef<HTMLButtonElement>(),
-    );
+  optionsRef.current = useMemo(() => {
+    return props.options.map(() => createRef<HTMLButtonElement>());
   }, [props.options]);
 
   const handleChange = useCallback(

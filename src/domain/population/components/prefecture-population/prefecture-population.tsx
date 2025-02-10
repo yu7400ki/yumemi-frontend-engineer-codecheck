@@ -1,4 +1,4 @@
-import { SlideSelector } from "@/components/ui/slide-selector";
+import { SegmentedControl } from "@/components/ui/segmented-control";
 import { useLocationState } from "@location-state/core";
 import { Suspense } from "react";
 import { css } from "styled-system/css";
@@ -19,7 +19,7 @@ export function PrefecturePopulation() {
         display: "grid",
       })}
     >
-      <SlideSelector
+      <SegmentedControl
         options={POPULATION_TYPE.map((type) => ({
           value: type,
           label: type,
