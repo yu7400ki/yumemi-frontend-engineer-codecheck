@@ -27,8 +27,10 @@ export function SegmentedControl(props: Props) {
     <div className={classes.root}>
       <div
         style={{
-          width: `calc(${100 / props.options.length}% - ${token("spacing.1")} * 2)`,
-          transform: `translateX(calc(${idx} * 100% + ${token("spacing.1")} * ${idx * 2}))`,
+          // (100% - padding - gap * (n - 1)) / n
+          width: `calc((100% - ${token("spacing.2")} - ${token("spacing.1")} * ${props.options.length - 1}) / ${props.options.length})`,
+          // 100% * idx + gap * idx
+          transform: `translateX(calc(${idx} * 100% + ${token("spacing.1")} * ${idx}))`,
         }}
         className={classes.indicator}
       />
