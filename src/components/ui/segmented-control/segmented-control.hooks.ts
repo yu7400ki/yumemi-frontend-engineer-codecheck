@@ -17,10 +17,8 @@ export function useSegmentedControl(props: Props) {
   });
   const optionsRef = useRef<RefObject<HTMLButtonElement | null>[]>([]);
 
-  useMemo(() => {
-    optionsRef.current = props.options.map(() =>
-      createRef<HTMLButtonElement>(),
-    );
+  optionsRef.current = useMemo(() => {
+    return props.options.map(() => createRef<HTMLButtonElement>());
   }, [props.options]);
 
   const handleChange = useCallback(
