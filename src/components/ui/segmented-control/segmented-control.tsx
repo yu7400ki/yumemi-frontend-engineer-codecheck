@@ -1,7 +1,7 @@
 import { token } from "styled-system/tokens";
-import { useSlideSelector } from "./slide-selector.hooks";
-import { slideSelectorRecipe } from "./slide-selector.recipe";
-import type { Option } from "./slide-selector.types";
+import { useSegmentedControl } from "./segmented-control.hooks";
+import { segmentedControlRecipe } from "./segmented-control.recipe";
+import type { Option } from "./segmented-control.types";
 
 export type Props = {
   options: Option[];
@@ -10,15 +10,16 @@ export type Props = {
   onChange?: (value: string) => void;
 };
 
-export function SlideSelector(props: Props) {
-  const { value, handleChange, handleKeyDown, optionsRef } = useSlideSelector({
-    options: props.options,
-    value: props.value,
-    defaultValue: props?.defaultValue ?? props.options[0].value,
-    onChange: props.onChange,
-  });
+export function SegmentedControl(props: Props) {
+  const { value, handleChange, handleKeyDown, optionsRef } =
+    useSegmentedControl({
+      options: props.options,
+      value: props.value,
+      defaultValue: props?.defaultValue ?? props.options[0].value,
+      onChange: props.onChange,
+    });
 
-  const classes = slideSelectorRecipe();
+  const classes = segmentedControlRecipe();
 
   const idx = props.options.findIndex((option) => option.value === value);
 
